@@ -9,6 +9,8 @@ from PIL import Image
 from scipy import stats
 from scipy import ndimage
 
+from pylab import *
+
 import GeometryFunctions as GEO
 
 def GetVerticeListFromContour(contour):
@@ -70,6 +72,29 @@ def GetHoughLinesP(im, minHoughLineLen = 5, maxLineGap = 1000):
             linesList.append([[x1, y1], [x2, y2]])
     return linesList
 
+def DivideHoughLineListIntoRegions(lines, numOfRgns):
+    X = 0
+    Y = 1
+
+    lineRgns = []
+    angles = []
+
+    for i in range(numOfRgns):
+        lineRgns.append([])
+        angles.append([])
+
+    multiplier = 1
+    regionLen = math.ceil(float(len(lines)) / float(4))
+    for i in range(len(lines)):
+        if i > regionLen * multiplier:
+            multiplier = multiplier + 1
+        lineRgns[multiplier - 1].append(lines[i])
+        angle, length = GEO.GetLineAngleAndLen(lines[i][0][X], lines[i][0][Y], lines[i][1][X], lines[i][1][Y])
+        angles[multiplier - 1].append(angle)
+
+    return lineRgns, angles
+
+
 # Gets correlation between left Y coordinate of a HoughLines and 
 def SkewLinRegress(houghLines):
     linesY = sorted(houghLines, key = lambda l: (l[0][1], l[1][1]))
@@ -86,9 +111,20 @@ def SkewLinRegress(houghLines):
         angles.append(angle)
         lengths.append(length)
 
-    # We can ignore the intercept in this case.
-    # The intercept represents the expected value when the angle is zero. 
     slope, intercept, r_value, p_value, std_err = stats.linregress(angles, leftYs)
+	'''
+	# Show linear points and trend line on screen
+	# -------------------------------------------
+    (m, b) = polyfit(angles, leftYs, 1)
+    yp = polyval([m,b], angles)
+    plot(angles, yp)
+    scatter(angles, leftYs)
+    grid(True)
+    xlabel('angles')
+    ylabel('leftYs')
+    show()
+	'''
+	
     return LinearRegressionResult(slope, intercept, r_value, p_value, std_err)
     
 def GetContentRegionsHoriz(imEdge, lineAngleNeg45ToPos45, offsetPix = 2):
