@@ -26,17 +26,17 @@ class OutputWriter:
             cv2.imwrite(txtBlockPath + '\TextBlock_' + str(t) + '_IMG' + '.png', 
                         self.txtBlocks[t].img)
 
-            file = open(txtBlockPath + os.sep + 'TextBlock_' + str(t) + '_OCR' + '.txt', 'w+')
-            file.write(self.txtBlocks[t].ocrText)
+            f = open(txtBlockPath + os.sep + 'TextBlock_' + str(t) + '_OCR' + '.txt', 'wb+')
 
+            f.write(self.txtBlocks[t].ocrText)
             for l in range(len(self.txtBlocks[t].lines)):
                 lineFolder = txtBlockPath + os.sep + 'TextBlock_' + str(t) + '_Lines'
 
                 if os.path.exists(lineFolder) == False:
                     os.mkdir(lineFolder)
 
-                file = open(lineFolder + os.sep + 'Line_' + str(l) + '_OCR.txt', 'w+')
-                file.write(self.txtBlocks[t].lines[l].ocrText)
+                f = open(lineFolder + os.sep + 'Line_' + str(l) + '_OCR.txt', 'w+')
+                f.write(self.txtBlocks[t].lines[l].ocrText)
 
                 cv2.imwrite(lineFolder + os.sep + 'Line_' + str(l) + '_IMG.png', 
                             self.txtBlocks[t].lines[l].img)
@@ -47,8 +47,8 @@ class OutputWriter:
                     if os.path.exists(wordFolder) == False:
                         os.mkdir(wordFolder)
                     
-                    file = open(wordFolder + os.sep + 'word_' + str(w) + '_OCR.txt', 'w+')
-                    file.write(self.txtBlocks[t].lines[l].words[w].ocrText)
+                    f = open(wordFolder + os.sep + 'word_' + str(w) + '_OCR.txt', 'w+')
+                    f.write(self.txtBlocks[t].lines[l].words[w].ocrText)
 
                     cv2.imwrite(wordFolder + os.sep + 'word_' + str(w) + '.png', 
                                 self.txtBlocks[t].lines[l].words[w].img)
@@ -56,15 +56,15 @@ class TextBlock:
     def __init__(self, img):
         self.lines = []
         self.img = img
-        self.ocrText = TR.ocr_image(DocVSN.ConvertOpenCVToPIL(img))
+        self.ocrText = TR.ocr_image(DocVSN.ConvertOpenCVToPIL(img)).encode('utf-8')
 
 class TextLine:
     def __init__(self, img):
         self.img = img
         self.words = []
-        self.ocrText = TR.ocr_image(DocVSN.ConvertOpenCVToPIL(img))
+        self.ocrText = TR.ocr_image(DocVSN.ConvertOpenCVToPIL(img)).encode('utf-8')
 
 class Word:
     def __init__(self, img):
         self.img = img
-        self.ocrText = TR.ocr_image(DocVSN.ConvertOpenCVToPIL(img))
+        self.ocrText = TR.ocr_image(DocVSN.ConvertOpenCVToPIL(img)).encode('utf-8')
