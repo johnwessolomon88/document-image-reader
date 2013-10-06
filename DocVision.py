@@ -9,8 +9,6 @@ from PIL import Image
 from scipy import stats
 from scipy import ndimage
 
-from pylab import *
-
 import GeometryFunctions as GEO
 
 def GetVerticeListFromContour(contour):
@@ -112,9 +110,9 @@ def SkewLinRegress(houghLines):
         lengths.append(length)
 
     slope, intercept, r_value, p_value, std_err = stats.linregress(angles, leftYs)
-	'''
-	# Show linear points and trend line on screen
-	# -------------------------------------------
+    '''
+    # Show linear points and trend line on screen
+    # -------------------------------------------
     (m, b) = polyfit(angles, leftYs, 1)
     yp = polyval([m,b], angles)
     plot(angles, yp)
@@ -123,7 +121,7 @@ def SkewLinRegress(houghLines):
     xlabel('angles')
     ylabel('leftYs')
     show()
-	'''
+    '''
 	
     return LinearRegressionResult(slope, intercept, r_value, p_value, std_err)
     
@@ -138,7 +136,7 @@ def GetContentRegionsHoriz(imEdge, lineAngleNeg45ToPos45, offsetPix = 2):
 
         # Create RGB Image for cropping
         imEdgeRGB = cv2.cvtColor(imEdge, cv2.COLOR_GRAY2BGR)
-        cv2.imwrite('Images\TextSkew\imEdgePRELoop.png', imEdgeRGB)
+        cv2.imwrite('Images' + os.sep + 'TextSkew' + os.sep + 'imEdgePRELoop.png', imEdgeRGB)
 
         contentRgnStart = None
         contentRgnLns = []

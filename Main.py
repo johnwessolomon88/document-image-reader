@@ -12,7 +12,7 @@ from scipy import ndimage
 X = 0
 Y = 1
 
-path = 'Images\TextSkew\s3.jpg'
+path = os.path.join(os.getcwd(), 'Images/TextSkew/s3.jpg')
 im = cv2.imread(path)
 imCpy = copy.deepcopy(im)
 
