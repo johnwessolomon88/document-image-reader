@@ -136,7 +136,7 @@ def GetContentRegionsHoriz(imEdge, lineAngleNeg45ToPos45, offsetPix = 2):
 
         # Create RGB Image for cropping
         imEdgeRGB = cv2.cvtColor(imEdge, cv2.COLOR_GRAY2BGR)
-        cv2.imwrite('Images\TextSkew\imEdgePRELoop.png', imEdgeRGB)
+        cv2.imwrite('Images' + os.sep + 'TextSkew' + os.sep + 'imEdgePRELoop.png', imEdgeRGB)
 
         contentRgnStart = None
         contentRgnLns = []
